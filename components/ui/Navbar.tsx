@@ -1,14 +1,22 @@
-import { useContext } from "react";
+import { useContext, useState } from 'react';
 import NextLink from "next/link";
 import { useRouter } from 'next/router';
-import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } from "@mui/material"
-import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, Toolbar, Typography } from "@mui/material"
+import { ClearAllOutlined, ClearOutlined, SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
 import { UIContext } from '../../context/ui';
 
 export const Navbar = () => {
 
    const router = useRouter();
    const { showMenu } = useContext(UIContext);
+
+   const [searchTerm, setSearchTerm] = useState('');
+   const [isVisible, setIsVisible] = useState(false);
+
+   const onSearchTerm = () => {
+      if (searchTerm.trim().length === 0) return;
+      router.push(`/search/${searchTerm}`);
+   }
 
    return (
       <AppBar>
@@ -42,19 +50,51 @@ export const Navbar = () => {
 
             <Box flex={1} />
 
-            {/* <IconButton>
-               <SearchOutlined />
-            </IconButton> */}
 
-            <IconButton
-               sx={{ display: { xs: 'block', sm: 'none' } }}
+
+            {
+               isVisible
+                  ? (
+
+                     <Input
+                        sx={{ display: { xs: 'none', md: 'flex' } }}
+                        className='fadeIn'
+                        autoFocus
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyPress={(e) =>
+                           e.key === 'Enter' ? onSearchTerm() : null}
+                        value={searchTerm}
+                        type='text'
+                        placeholder="Buscar..."
+                        endAdornment={
+                           <InputAdornment position="end">
+                              <IconButton
+                                 onClick={() => setIsVisible(false)}
+                              >
+                                 <ClearOutlined />
+                              </IconButton>
+                           </InputAdornment>
+                        }
+                     />
+                  )
+                  : (
+                     < IconButton
+                        className='fadeIn'
+                        sx={{ display: { xs: 'none', md: 'block' } }}
+                        onClick={() => setIsVisible(true)}
+                     >
+                        <SearchOutlined />
+                     </IconButton>
+                  )
+            }
+            < IconButton
+               sx={{ display: { xs: 'block', md: 'none' } }}
                onClick={() => showMenu(true)}
             >
                <SearchOutlined />
             </IconButton>
 
-
-            <NextLink href="/cart" passHref>
+            < NextLink href="/cart" passHref>
                <Link>
                   <IconButton>
                      <Badge badgeContent={2} color='secondary'>
@@ -68,6 +108,6 @@ export const Navbar = () => {
             </Button>
 
          </Toolbar>
-      </AppBar>
+      </AppBar >
    )
 }
