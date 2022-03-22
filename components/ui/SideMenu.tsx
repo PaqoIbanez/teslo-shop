@@ -2,13 +2,14 @@ import { AccountCircleOutlined, AdminPanelSettingsOutlined, AirplaneTicketOutlin
 import { Drawer, Input, InputAdornment, List, ListItem, IconButton, Button, ListItemIcon, ListItemText, Divider, ListSubheader } from '@mui/material';
 import { Box } from "@mui/system"
 import { KeyboardEvent, useContext, useState } from 'react';
-import { UIContext } from "../../context";
+import { AuthContext, UIContext } from "../../context";
 import { useRouter } from 'next/router';
 
 export const SideMenu = () => {
 
    const router = useRouter();
    const { isMenuOpen, showMenu } = useContext(UIContext);
+   const { logout, isLoggedIn } = useContext(AuthContext);
    const [searchTerm, setSearchTerm] = useState('');
 
    const navigateTo = (url: string) => {
@@ -20,6 +21,16 @@ export const SideMenu = () => {
       if (searchTerm.trim().length > 0) {
          navigateTo(`/search/${searchTerm}`)
       }
+   }
+
+   const userLogout = () => {
+      showMenu(false)
+      logout();
+   }
+
+   const userLogin = () => {
+      showMenu(false)
+      router.push('/auth/login')
    }
 
    return (
@@ -63,18 +74,21 @@ export const SideMenu = () => {
                   </ListItemIcon>
                   <ListItemText primary="Mis ordenes" />
                </ListItem>
-               <ListItem button>
-                  <ListItemIcon>
-                     <VpnKeyOutlined />
-                  </ListItemIcon>
-                  <ListItemText primary="Ingresar" />
-               </ListItem>
-               <ListItem button>
-                  <ListItemIcon>
-                     <LoginOutlined />
-                  </ListItemIcon>
-                  <ListItemText primary="Salir" />
-               </ListItem>
+               {
+                  !isLoggedIn
+                     ? <ListItem button onClick={userLogin}>
+                        <ListItemIcon>
+                           <VpnKeyOutlined />
+                        </ListItemIcon>
+                        <ListItemText primary="Ingresar" />
+                     </ListItem>
+                     : <ListItem button onClick={userLogout}>
+                        <ListItemIcon>
+                           <LoginOutlined />
+                        </ListItemIcon>
+                        <ListItemText primary="Salir" />
+                     </ListItem>
+               }
 
                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}
                   onClick={() => navigateTo('/category/men')}
