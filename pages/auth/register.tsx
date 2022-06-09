@@ -22,6 +22,7 @@ const RegisterPage = () => {
    const [errorMessage, setErrorMessage] = useState('');
    const { registerUser } = useContext(AuthContext)
    const router = useRouter();
+   const destination = router.query.p?.toString() || '/';
 
    const onRegisterForm = async ({ name, email, password }: FormData) => {
       setShowError(false);
@@ -33,8 +34,8 @@ const RegisterPage = () => {
          setShowError(true);
          return;
       }
-
-      router.replace('/');
+      const destination = router.query.p?.toString() || '/';
+      router.replace(destination);
 
 
    }
@@ -109,7 +110,7 @@ const RegisterPage = () => {
                   </Grid>
 
                   <Grid item xs={12} display='flex' justifyContent='end ' >
-                     <NextLink href='/auth/login' passHref>
+                     <NextLink href={router.query.p ? `/auth/login?p=${router.query.p}` : '/auth/login'} passHref>
                         <Link color='#000' underline='always'>
                            Ya tienes una cuenta?
                         </Link>

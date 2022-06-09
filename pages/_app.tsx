@@ -6,6 +6,18 @@ import { SWRConfig } from 'swr';
 import { UIProvider, CartProvider, AuthProvider } from '../context';
 
 function MyApp({ Component, pageProps }: AppProps) {
+   const arr = [
+      ['Rojo', 'Verde', 'Azul'],
+      ['tela', 'hilo', 'lana'],
+      ['L', 'M', 'S']
+   ];
+
+   const getAllCombinations = (arr: []) => {
+      const newArray = [];
+      arr.map((item, i) => {
+         console.log(i);
+      })
+   }
    return (
       <SWRConfig
          value={{

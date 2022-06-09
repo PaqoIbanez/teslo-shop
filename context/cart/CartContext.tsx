@@ -9,6 +9,7 @@ interface ContextProps {
    subTotal: number;
    tax: number;
    total: number;
+   isLoaded: boolean;
 
 
    // methods

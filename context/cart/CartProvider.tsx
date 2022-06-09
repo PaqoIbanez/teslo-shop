@@ -4,6 +4,7 @@ import { CartContext, cartReducer } from './';
 import Cookie from 'js-cookie';
 
 export interface CartState {
+   isLoaded: boolean;
    cart: ICartProduct[];
    numberOfItems: number;
    subTotal: number;
@@ -12,6 +13,7 @@ export interface CartState {
 }
 
 const CART_INITIAL_STATE: CartState = {
+   isLoaded: false,
    cart: [],
    numberOfItems: 1,
    subTotal: 0,
@@ -72,7 +74,6 @@ export const CartProvider: FC = ({ children }) => {
       });
       dispatch({ type: '[Cart] - Add Product', payload: [...updatedProducts] })
    }
-
 
    const deleteProductFromCart = async (product: ICartProduct) => {
       dispatch({ type: '[Cart] - Remove PRoduct in Cart', payload: product });

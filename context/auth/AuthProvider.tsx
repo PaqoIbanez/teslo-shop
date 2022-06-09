@@ -74,9 +74,10 @@ export const AuthProvider: FC = ({ children }) => {
    }
 
    const logout = () => {
-      dispatch({ type: '[Auth] - Logout' });
       Cookies.remove('token');
-      router.push('/auth/login');
+      Cookies.remove('cart');
+
+      router.reload();
    }
 
    return (
